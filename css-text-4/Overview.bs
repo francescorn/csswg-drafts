@@ -10425,12 +10425,14 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 		* inheritance
 		* animation type
 		* applies to text
-		* tests for trim-auto, allow-end, auto values"></wpt>
+		* tests for end-of-line behavior for all values
+		* tests for start-of-line behavior for all values other than normal and space-first
+		* tests for adjacent pairs for all values other than the initial value"></wpt>
 
 	<pre class="propdef">
 	Name: text-spacing-trim
 	Value: <<spacing-trim>> | auto
-	Initial: space-first
+	Initial: normal
 	Applies to: text
 	Inherited: yes
 	Percentages: N/A
@@ -10457,11 +10459,10 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 	Values are defined as follows:
 
 	<pre class=prod>
-		<dfn><<spacing-trim>></dfn> = space-all | trim-auto | [ allow-end || space-first ] | trim-all
+		<dfn><<spacing-trim>></dfn> = space-all | normal | trim-auto | trim-start | space-first | trim-all
 	</pre>
 
 	<dl dfn-for=text-spacing-trim dfn-type=value>
-
 		<dt><dfn>space-all</dfn>
 		<dd>
 			All fullwidth punctuation characters are set with full-width glyphs (spaced).
@@ -10470,6 +10471,17 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 				text-spacing-trim/text-spacing-trim-space-all-001.html
 				text-spacing-trim/text-spacing-trim-dynamic-001.html
 			</wpt>
+
+		<dt><dfn>normal</dfn>
+		<dd>
+			Set <a>fullwidth opening punctuation</a> with full-width glyphs (spaced)
+			at the start of each line;
+			set <a>fullwidth closing punctuation</a> with half-width glyphs (flush)
+			at the end of each line
+			if it does not otherwise fit prior to justification,
+			else set the punctuation with full-width glyphs;
+			and collapse spacing between punctuation glyphs
+			<a href="#fullwidth-collapsing">as described below</a>.
 
 		<dt><dfn>trim-auto</dfn>
 		<dd>
@@ -10485,8 +10497,7 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 			Set <a>fullwidth opening punctuation</a> with full-width glyphs (spaced)
 			on the first line the [=block container=]
 			and each line after a [=forced line break=].
-			Otherwise as ''trim-auto''
-			(unless ''text-spacing-trim/allow-end'' is also specified).
+			Otherwise as ''trim-auto''.
 
 			<wpt>
 				text-spacing-trim/text-spacing-trim-001.html
@@ -10501,7 +10512,7 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 			<details class="note">
 				<summary>This value exists for compat requirements.</summary>
 
-				This value exists to manage formatting of existing Chinese and Japanese content,
+				This value exists to manage formatting of some existing Chinese and Japanese content,
 				for which ''trim-auto'' would have been appropriate typographically,
 				except that they are already written
 				to expect the first line to be set as for ''space-all''.
@@ -10532,14 +10543,11 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 				See [[#japanese-start-edges]] for examples.
 			</details>
 
-		<dt><dfn>allow-end</dfn>
+		<dt><dfn>trim-start</dfn>
 		<dd>
-			Set <a>fullwidth closing punctuation</a> with half-width glyphs (flush)
-			at the end of each line
-			if it does not otherwise fit prior to justification,
-			else set the punctuation with full-width glyphs.
-			Otherwise as ''trim-auto''
-			(unless ''space-first'' is also specified).
+			Set <a>fullwidth opening punctuation</a> with half-width glyphs (flush)
+			at the start of each line.
+			Otherwise as ''text-spacing-trimm/normal''.
 
 		<dt><dfn>trim-all</dfn>
 		<dd>
@@ -10563,6 +10571,47 @@ CJK Punctuation Spacing: the 'text-spacing-trim' property</h3>
 
 			ISSUE: Do we need ''text-spacing-trim/auto''? It would be weird for the author to choose platform-dependent behavior at the start of the first line, and it should otherwise use ''text-spacing-trim/trim-auto''.
 	</dl>
+
+	<div class=note>
+		Here is an informal summary of what the various values do:
+
+		<table class="complex data">
+		<thead>
+			<tr>
+				<th>Value
+				<th>Trim at line start
+				<th>Trim adjacent pairs
+				<th>Trim at line end
+				<th>Trim everywhere
+		<tbody>
+			<tr>
+				<th>''space-all''
+				<td colspan=4>no
+			<tr>
+				<th>''text-spacing-trim/normal''
+				<td>no
+				<td rowspan=4>yes
+				<td>only if would not fit
+				<td rowspan=4>no
+			<tr>
+				<th>''trim-auto''
+				<td rowspan=2>yes
+				<td>yes
+			<tr>
+				<th>''trim-start''
+				<td>only if would not fit
+			<tr>
+				<th>''space-first''
+				<td>yes except on the first line
+				<td>yes
+			<tr>
+				<th>''trim-all''
+				<td colspan=4>yes
+			<tr>
+				<th>''text-spacing-trim/auto''
+				<td colspan=4>user-agent specific / platform dependent
+		</table>
+	</div>
 
 
 <h4 id="fullwidth-collapsing">
@@ -10943,7 +10992,7 @@ Character Class Spacing Shorthand: the 'text-spacing' property</h3>
 
 	<pre class="propdef shorthand">
 	Name: text-spacing
-	Value: normal | none | auto | <<spacing-trim>> || <<autospace>>
+	Value: none | auto | <<spacing-trim>> || <<autospace>>
 	Initial: see individual properties
 	Applies to: text
 	Inherited: yes
@@ -10963,12 +11012,6 @@ Character Class Spacing Shorthand: the 'text-spacing' property</h3>
 	Values are defined as follows:
 
 	<dl dfn-for=text-spacing dfn-type=value>
-		<dt><dfn>normal</dfn>
-		<dd>
-			Specifies the baseline behavior,
-			setting each [=sub-property=] to its [=initial value=].
-			Equivalent to ''space-first ideograph-alpha ideograph-numeric''.
-
 		<dt><dfn>none</dfn>
 		<dd>
 			Turns off all text-spacing features:
@@ -10992,6 +11035,8 @@ Character Class Spacing Shorthand: the 'text-spacing' property</h3>
 			'text-spacing-trim' is set to its [=initial value=].
 	</dl>
 
+	Note: As ''text-spacing-trim/normal'' is the initial value of both 'text-spacing-trim' and 'text-autospace',
+	''text-spacing: normal'' resets both to their initial values.
 
 <h3 id="boundary-shaping">
 Shaping Across Element Boundaries</h3>

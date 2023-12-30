@@ -22,6 +22,10 @@ spec: css2;
 spec: css-backgrounds-3; type: property;
 	text: border-color
 	text: box-shadow
+	text: border-top-width
+	text: border-left-width
+	text: border-bottom-width
+	text: border-right-width
 spec: css-color-4; type: value; text: currentcolor
 spec: css-color-5; type: type; text: <color>
 spec: css-color-5; type:type; text: <absolute-color-function>
@@ -1171,8 +1175,8 @@ URL Processing Model</h4>
 	(i.e. use the default, UTF-8),
 	regardless of the stylesheet encoding.
 
-	Note:In other words, a URL written in CSS
-	will always [=string/percent-encode after encoding|percent-encode=] non-ASCII codepoints
+	Note: In other words, a URL written in CSS
+	will always <l spec=url>[=string/percent-encode after encoding|percent-encode=]</l> non-ASCII codepoints
 	using UTF-8 in the [=URL=] object
 	(and thus whenever using the [=URL=] value for e.g. network requests),
 	regardless of the stylesheet's own encoding.
@@ -2338,7 +2342,7 @@ The Various Viewport-relative Units</h5>
 	It's therefore not entirely clear whether this was the best mapping,
 	and thus earlier editions of this specifications
 	allowed UAs to choose the mapping of these default units.
-	However at this point the mapping to the [=large viewport units=]
+	However at this point the mapping to the [=large viewport-percentage units=]
 	is presumed to be required for Web compatibility.
 
 	In situations where there is no element
@@ -2449,7 +2453,7 @@ Absolute Lengths: the ''cm'', ''mm'', ''Q'', ''in'', ''pt'', ''pc'', ''px'' unit
 	was made because too much existing content relies on the assumption of 96dpi,
 	and breaking that assumption broke the content.)
 
-	Note: Units are [=ASCII case-insensitive=] and serialize as lower case, for example 1Q serializes as 1q.
+	Note: Units are [=ASCII case-insensitive=] and serialize as lowercase, for example 1Q serializes as 1q.
 
 	<wpt>
 	css/css-values/absolute-length-units-001.html
@@ -2659,7 +2663,7 @@ Frequency Units: the <<frequency>> type and ''Hz'', ''kHz'' units</h3>
 	All <<frequency>> units are <a>compatible</a>,
 	and ''hz'' is their <a>canonical unit</a>.
 
-	Note: Units are [=ASCII case-insensitive=] and serialize as lower case, for example 1Hz serializes as 1hz.
+	Note: Units are [=ASCII case-insensitive=] and serialize as lowercase, for example 1Hz serializes as 1hz.
 
 <!--
 ████████  ████████  ██████   ███████
@@ -4181,8 +4185,8 @@ Type Checking</h3>
 				:: the [=CSSNumericValue/type=] is «[ "resolution" → 1 ]»
 				: <<flex>>
 				:: the [=CSSNumericValue/type=] is «[ "flex" → 1 ]»
-				: <<calc-constant>>
-				:: the [=CSSNumericValue/type=] is «[ ]» (empty map)
+				: <<calc-keyword>>
+				:: the [=CSSNumericValue/type=] is as defined by the keyword
 				: <<percentage>>
 				::
 					If, in the context in which the [=math function=]
@@ -4529,8 +4533,9 @@ Simplification</h4>
 				do so,
 				and return the value.
 
-			3. If |root| is a <<calc-constant>>,
-				return its numeric value.
+			3. If |root| is a <<calc-keyword>> that can be resolved,
+				return what it resolves to,
+				[=simplified=].
 
 			4. Otherwise, return |root|.
 
@@ -5234,13 +5239,15 @@ Recent Changes</h3>
 
 	(This is a subset of [[#additions-L3]].)
 
-	Substantial changes since <a href="https://www.w3.org/TR/2023/WD-css-values-4-20231027/">287 October 2023 WD</a>:
-	* Pinned the [=default viewport units=] to the [=large viewport units=]--
+	Substantial changes since <a href="https://www.w3.org/TR/2023/WD-css-values-4-20231027/">27 October 2023 WD</a>:
+	* Pinned the [=default viewport-percentage units=] to the [=large viewport-percentage units=]--
 		despite violation of the “avoid dataloss by default principle”--
 		given existing interoperability and presumed Web-compat restriction.
 		(<a href="https://github.com/w3c/csswg-drafts/issues/6454">Issue 6452</a>)
 	* Added an explicit definition for the [=CSS grammar production block=] convention.
 		(<a href="https://github.com/w3c/csswg-drafts/issues/2921">Issue 2921</a>)
+	* Clarified character encoding of percent-encoded URLs.
+		(<a href="https://github.com/w3c/csswg-drafts/issues/9301">Issue 9301</a>)
 
 	Substantial changes since <a href="https://www.w3.org/TR/2023/WD-css-values-4-20230406/">6 April 2023 WD</a>:
 
@@ -5259,6 +5266,8 @@ Recent Changes</h3>
 		are always resolved against the parent element
 		when used in a 'font-*' property.
 		(<a href="https://github.com/w3c/csswg-drafts/issues/8169">Issue 8169</a>)
+	* Simplify away single-argument ''min()'' and ''max()'' functions.
+		(<a href="https://github.com/w3c/csswg-drafts/issues/9559">Issue 9559</a>)
 
 	Substantial changes since <a href="https://www.w3.org/TR/2022/WD-css-values-4-20221019/">19 October 2022 WD</a>:
 	<ul>
