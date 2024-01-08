@@ -511,7 +511,7 @@ urlPrefix: https://wicg.github.io/navigation-api/; type: interface;
 
 	<pre class=propdef>
 	Name: view-transition-name
-	Value: none | <<custom-ident>>
+	Value: none | auto | <<custom-ident>>
 	Initial: none
 	Inherited: no
 	Percentages: n/a
@@ -533,6 +533,9 @@ urlPrefix: https://wicg.github.io/navigation-api/; type: interface;
 	<dl dfn-type=value dfn-for=view-transition-name>
 		: <dfn>none</dfn>
 		:: The [=/element=] will not participate independently in a view transition.
+
+		: <dfn>auto</dfn>
+		:: This should be treated as an invalid value, despite being a valid <<custom-ident>>. The property value remains unchanged.
 
 		: <dfn><<custom-ident>></dfn>
 		:: The [=/element=] participates independently in a view transition--
@@ -1041,6 +1044,7 @@ urlPrefix: https://wicg.github.io/navigation-api/; type: interface;
 		: <dfn>named elements</dfn>
 		:: a [=/map=], whose keys are [=view transition names=] and whose values are [=captured elements=].
 			Initially a new [=map=].
+			Note: Since this is associated to the {{ViewTransition}}, it will be cleaned up when [=Clear view transition=] is called.
 
 		: <dfn>phase</dfn>
 		:: One of the following ordered phases, initially "`pending-capture`":
@@ -1454,6 +1458,10 @@ urlPrefix: https://wicg.github.io/navigation-api/; type: interface;
 
 			1. If |namedElements|[|transitionName|] does not [=map/exist=],
 				then set |namedElements|[|transitionName|] to a new [=captured element=] struct.
+
+				Note: We intentionally add this struct to the end of this ordered map.
+					This implies than names which only exist in the new DOM (entry animations) will be painted on top of names only in the old DOM (exit animations) and names in both DOMs (paired animations).
+					This might not be the right layering for all cases. See <a href="https://github.com/w3c/csswg-drafts/issues/8941">issue 8941</a>.
 
 			1. Set |namedElements|[|transitionName|]'s [=new element=] to |element|.
 	</div>
@@ -1940,6 +1948,9 @@ Changes from <a href="https://www.w3.org/TR/2023/WD-css-view-transitions-1-20230
 * Copy `color-scheme` from DOM element to ''::view-transition-group()''. See <a href="https://github.com/w3c/csswg-drafts/issues/9276">issue 9276</a>.
 * Expose [=auto-skip view transition=] for a {{Document}}, to allow having outbound cross-document transitions preceed programmatic view transiitons. see <a href="https://github.com/w3c/csswg-drafts/issues/9512">issue 9512</a>.
 * Add a note about why 'view-transition-name' should be animatable.
+* `view-transition-name: auto` should be an invalid value. See <a href="https://github.com/w3c/csswg-drafts/issues/9639">issue 9639</a>.
+* Add note to explain paint order for entry animations. See <a href="https://github.com/w3c/csswg-drafts/issues/9672">issue 9672</a>.
+* Add note to explain how the named elements are cleaned up. See <a href="https://github.com/w3c/csswg-drafts/issues/9669">issue 9669</a>.
 
 <h3 id="changes-since-2022-05-25">
 Changes from <a href="https://www.w3.org/TR/2023/WD-css-view-transitions-1-20230525/">2022-05-25 Working Draft</a>
