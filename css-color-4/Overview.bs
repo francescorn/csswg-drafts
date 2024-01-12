@@ -600,7 +600,7 @@ Transparency: the 'opacity' property</h3>
 
 	<pre class=propdef>
 	Name: opacity
-	Value: <<alpha-value>>
+	Value: <<opacity-value>>
 	Initial: 1
 	Applies to: all elements
 	Inherited: no
@@ -633,7 +633,7 @@ Transparency: the 'opacity' property</h3>
 	</wpt>
 
 	<dl>
-		<dt><dfn dfn-for="opacity"><<alpha-value>></dfn>
+		<dt><dfn dfn-for="opacity"><<opacity-value>></dfn>
 		<dd>
 			The opacity to be applied to the element.
 			The resulting opacity is applied to the entire element,
@@ -649,9 +649,10 @@ Transparency: the 'opacity' property</h3>
 		inline-opacity-float-child.html
 	</wpt>
 
-	Opacity in CSS is typically represented using the <<alpha-value>> syntax,
+	Opacity in CSS is typically represented using the <<opacity-value>> syntax,
 	for example in the 'opacity' property
-	or as the [=alpha component=] in a [=color function=].
+	or as the [=alpha component=] in a [=color function=],
+	using the <<alpha-value>> syntax.
 	Represented as a <<number>>, the useful range of the value is ''0''
 	(representing full transparency)
 	to ''1''
@@ -691,7 +692,7 @@ Transparency: the 'opacity' property</h3>
 
 	If separate opacity for each glyph is desired,
 	it can be achieved by using a color value
-	which includes opacity,
+	which includes alpha,
 	rather than setting the 'opacity' property.
 
 	If a box has 'opacity' less than 1,
@@ -761,7 +762,10 @@ Transparency: the 'opacity' property</h3>
 		tagged-images-002.html
 		tagged-images-003.html
 		tagged-images-004.html
-		/png/cicp-chunk.html
+	</wpt>
+
+	<wpt pathprefix="/png">
+		cicp-chunk.html
 	</wpt>
 
 	If the color profile or other identifying information is invalid, the image is treated as [=untagged images=]
@@ -3486,6 +3490,8 @@ Specifying Lab and LCH: the ''lab()'' and ''lch()'' functional notations</h3>
 			oklch-009.html
 			oklch-010.html
 			oklch-011.html
+			oklch-l-over-1-1.html
+			oklch-l-over-1-2.html
 			parsing/color-valid.html
 		</wpt>
 
